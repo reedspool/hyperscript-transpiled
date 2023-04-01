@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import vitest, { describe, it, expect } from 'vitest'
 import * as Parser from './parser.cjs';
 import { transpile } from "./transpiler";
 const wrap = (text: string) =>
@@ -6,89 +6,70 @@ const wrap = (text: string) =>
         (text2: string, ...args: any[]) =>
             fn(text + text2, ...args)
 const given = wrap('Given ')(describe);
-const when = wrap('When ')(it);
 const then = wrap('Then ')(it);
-const match = (transpiled: string, regex: RegExp) => expect(transpiled).toMatch(regex);
-const t = (program: string) => transpile(Parser.parse(program))
-const tMatches = (program: string, regex: RegExp) => () => match(t(program), regex);
+const t = (program: string) => {
+    let parsed;
+    try {
+        parsed = Parser.parse(program)
+    } catch (e) {
+        throw new Error(`Error parsing \`${program}\`: ${e}`)
+    }
+    try {
+        return transpile(parsed)
+    } catch (e) {
+        throw new Error(`Error transpiling \`${program}\`: ${e}`)
+    }
+}
 given("a test suite", () => {
     then('assertions don\'t fail', () => expect(1).toEqual(1))
 })
 given("a transpiler", () => {
-    then(
-        "it provides a transpile function",
-        () => expect(typeof transpile).toEqual("function"))
-    then(
-        "it transpiles an empty program",
-        tMatches('', /\(target\)\s*=>/))
-    when("it transpiles a integer expression", tMatches('3', /3/));
-    when("it transpiles a float number expression", tMatches('3.14', /3\.14/));
-    when("it transpiles a integer seconds expression to milliseconds", tMatches('3s', /\(\s*3\s*\*\s*1000\)/));
-    when("it transpiles a float seconds expression to milliseconds", tMatches('3.14s', /\(\s*3.14\s*\*\s*1000\)/));
-    when("it transpiles a integer milliseconds expression", tMatches('5ms', /5/));
-    when("it transpiles a float milliseconds expression", tMatches('5.44ms', /5.44/));
-    when("it transpiles a compound expression joined by `then`", () => {
-        const program = t('log "hello" then log "hola"');
-        then("it includes the first log", () => match(program, /hello/))
-        then("it includes a separating comma", () => match(program, /,/))
-        then("it includes the second log", () => match(program, /hola/))
-    });
-    when("it transpiles a wait expression", () => {
-        const program = t('wait 1.24s');
-        then("it calls the runtime function", () => match(program, /____.wait\(/))
-        then("it includes the duration", () => match(program, /1.24/))
-    });
-    when("it transpiles an untargeted style attr expression", () => {
-        const program = t('*backgroundColor');
-        then("it attempts to access the style", () => match(program, /backgroundColor/))
-        then("it uses the default target", () => match(program, /target\./))
-    });
-    when("it transpiles a targeted style attr expression", () => {
-        const program = t('*backgroundColor of anotherTarget');
-        then("it accesses the style ", () => match(program, /\.style\.backgroundColor/))
-        then("it uses the given target", () => match(program, /anotherTarget/))
-    });
-    when("it transpiles a next expression", () => {
-        const program = t('next ".clazz"');
-        then("it calls the runtime function", () => match(program, /____.next\(/))
-        then("it passes the selector", () => match(program, /\.clazz/))
-    });
-    when("it transpiles setting a variable to a string", () => {
-        const program = t('set myColor to "blue"');
-        then("it references the variable name", () => match(program, /myColor/))
-        then("it sets", () => match(program, /=/))
-        then("it provides the value", () => match(program, /blue/))
-    });
-    when("it transpiles setting an untargeted style attr expression to a string", () => {
-        const program = t('set *backgroundColor to "blue"');
-        then("it accesses the style ", () => match(program, /\.style\.backgroundColor/))
-        then("it uses the default target", () => match(program, /target\./))
-        then("it sets", () => match(program, /=/))
-        then("it provides the value", () => match(program, /blue/))
-    });
-    then(
-        "it transpiles a log command with no text",
-        tMatches('log', /console\.log\(\)/))
-    then(
-        "it transpiles a log command with text",
-        tMatches('log "hello"', /console\.log\("hello"\)/))
-    when("it transpiles a single-line on-click feature", () => {
-        const program = t('on click log "hello"');
-        then("it adds an event", () => match(program, /target\.addEventListener/))
-        then("it includes a log", () => match(program, /console\.log\("hello"\)/))
-    })
-    when("it transpiles a multi-line on-click feature", () => {
-        const program = t('on click\nlog "hello"');
-        then("it adds an event", () => match(program, /target\.addEventListener/))
-        then("it includes a log", () => match(program, /console\.log\("hello"\)/))
-    })
-    when("it transpiles a self reference", () => {
-        then("`me` reflects the target", () => match(t('me'), /\(?target\)?/))
-        then("`I` reflects the target", () => match(t('I'), /\(?target\)?/))
-    })
-    when("it transpiles a function call expression", () => {
-        then("the function name is present", () => match(t('call myFunc()'), /myFunc/))
-        then("the function is called", () => match(t('call myFunc()'), /myFunc\s*\(\s*\)/))
-        then("the function is called with arguments", () => match(t('call myFunc(a, b, c)'), /myFunc\s*\(\s*a\s*,\s*b\s*,\s*c\s*\)/))
+    then("it transpiles", () => {
+        expect(typeof transpile, "it provides a transpile function").toEqual("function")
+        expect(t(''), "it transpiles an empty program").toMatch(/\(target\)\s*=>/)
+        expect(t('3'), "it transpiles an integer expression").toMatch(/3/)
+        expect(t('3.14'), "it transpiles a float number expression").toMatch(/3\.14/)
+        expect(t('3s'), "it transpiles an integer seconds expression to milliseconds").toMatch(/\(\s*3\s*\*\s*1000\)/)
+        expect(t('3.14s'), "it transpiles a float seconds expression to milliseconds").toMatch(/\(\s*3.14\s*\*\s*1000\)/)
+        expect(t('5ms'), "it transpiles an integer milliseconds expression").toMatch(/5/)
+        expect(t('5.44ms'), "it transpiles a float milliseconds expression").toMatch(/5.44/)
+        let program = t('log "hello" then log "hola"');
+        expect(program, "it includes the first log").toMatch(/hello/)
+        expect(program, "it includes a separating comma").toMatch(/,/)
+        expect(program, "it includes the second log").toMatch(/hola/)
+        program = t('wait 1.24s');
+        expect(program, "it calls the runtime function").toMatch(/____.wait\(/)
+        expect(program, "it includes the duration").toMatch(/1.24/)
+        program = t('*backgroundColor');
+        expect(program, "it attempts to access the style").toMatch(/backgroundColor/)
+        expect(program, "it uses the default target").toMatch(/target\./)
+        program = t('*backgroundColor of anotherTarget');
+        expect(program, "it accesses the style ").toMatch(/\.style\.backgroundColor/)
+        expect(program, "it uses the given target").toMatch(/anotherTarget/)
+        program = t('next ".clazz"');
+        expect(program, "it calls the runtime function").toMatch(/____.next\(/)
+        expect(program, "it passes the selector").toMatch(/\.clazz/)
+        program = t('set myColor to "blue"');
+        expect(program, "it references the variable name").toMatch(/myColor/)
+        expect(program, "it sets").toMatch(/=/)
+        expect(program, "it provides the value").toMatch(/blue/)
+        program = t('set *backgroundColor to "blue"');
+        expect(program, "it accesses the style ").toMatch(/\.style\.backgroundColor/)
+        expect(program, "it uses the default target").toMatch(/target\./)
+        expect(program, "it sets").toMatch(/=/)
+        expect(program, "it provides the value").toMatch(/blue/)
+        expect(t('log'), "it transpiles a log command with no text").toMatch(/console\.log\(\s*\)/)
+        expect(t('log "hello"'), "it transpiles a log command with text").toMatch(/console\.log\("hello"\)/)
+        program = t('on click log "hello"');
+        expect(program, "it adds an event").toMatch(/target\.addEventListener/)
+        expect(program, "it includes a log").toMatch(/console\.log\("hello"\)/)
+        program = t('on click\nlog "hello"');
+        expect(program, "it adds an event").toMatch(/target\.addEventListener/)
+        expect(program, "it includes a log").toMatch(/console\.log\("hello"\)/)
+        expect(t('me'), "`me` reflects the target").toMatch(/\(?target\)?.*target/)
+        expect(t('I'), "`I` reflects the target").toMatch(/\(?target\)?.*target/)
+        expect(t('call myFunc()'), "the function name is present").toMatch(/myFunc/)
+        expect(t('call myFunc()')).toMatch(/myFunc\s*\(\s*\)/)
+        expect(t('call myFunc(a, b, c)'), "the function is called with arguments").toMatch(/myFunc\s*\(\s*a\s*,\s*b\s*,\s*c\s*\)/)
     })
 })
