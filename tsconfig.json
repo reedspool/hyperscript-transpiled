@@ -1,23 +1,27 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-
-    /* Disabled because ts-pegjs output has unused variables
-    /* And there's no way to disable this one rule for htis one file
-    /* See https://github.com/microsoft/TypeScript/issues/19139 */
-    /* "noUnusedLocals": true, */
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"]
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "moduleResolution": "Node",
+        "strict": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        /* Disabled because ts-pegjs output has unused variables */
+        /* And there's no way to disable this one rule for htis one file */
+        /* See https://github.com/microsoft/TypeScript/issues/19139 */
+        /* "noUnusedLocals": true, */
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "src"
+    ]
 }
