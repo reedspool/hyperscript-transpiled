@@ -9,11 +9,12 @@
         "preview": "vite preview",
         "test": "vitest",
         "coverage": "vitest run --coverage",
-        "generate_parser": "cd src/hyperscript-transpiler/; peggy -o parser.cjs grammar.pegjs"
+        "generate_parser": "cd src/hyperscript-transpiler/; peggy --plugin ../../node_modules/ts-pegjs/src/tspegjs -o parser.ts --cache grammar.pegjs"
     },
     "devDependencies": {
         "@vitest/coverage-istanbul": "^0.29.8",
         "peggy": "^3.0.2",
+        "ts-pegjs": "^3.1.0",
         "typescript": "^4.9.3",
         "vite": "^4.2.0",
         "vitest": "^0.29.8"

@@ -1,5 +1,5 @@
 import vitest, { describe, it, expect } from 'vitest'
-import * as Parser from './parser.cjs';
+import { parse } from './parser';
 import { transpile } from "./transpiler";
 const wrap = (text: string) =>
     (fn: Function) =>
@@ -10,7 +10,7 @@ const then = wrap('Then ')(it);
 const t = (program: string) => {
     let parsed;
     try {
-        parsed = Parser.parse(program)
+        parsed = parse(program)
     } catch (e) {
         throw new Error(`Error parsing \`${program}\`: ${e}`)
     }

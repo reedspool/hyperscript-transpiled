@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
-import * as Parser from './parser.cjs';
+import { parse } from './parser';
 import { transpile } from "./transpiler.js";
 import { InstalledGlobal, run } from "./runtime.js";
 const {
@@ -15,7 +15,7 @@ const t7e = (program: string) => transpile(Parser.parse(program))
 const exec = async (program: string, target?: Element) => {
     let parsed, transpiled;
     try {
-        parsed = Parser.parse(program)
+        parsed = parse(program)
     } catch (e) {
         throw new Error(`Error parsing \`${program}\`: ${e}`)
     }

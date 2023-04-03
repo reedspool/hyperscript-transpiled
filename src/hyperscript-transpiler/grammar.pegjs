@@ -11,8 +11,14 @@ featureDescriptor =
         "on" whitespace _ event:eventName
         { return { event } }
 
+// Want to get back here when ts-pegjs supports Peggy 3.*.*'s list syntax
+// See https://peggyjs.org/documentation.html#parsing-lists
+// See https://github.com/metadevpro/ts-pegjs/issues/93
+// featureBody
+//   = compoundExpression|1.., commandDelimeter|
+// For now, using this stand-in:
 featureBody
-  = compoundExpression|1.., commandDelimeter|
+  = head:compoundExpression tail:(commandDelimeter @compoundExpression)* { return [head, ...tail]; }
 
 compoundExpression = first:expression next:(whitespace _ "then" whitespace _ expression)? {
                    return next ? { type: "CompoundExpression", first, next: next[5] } : first
@@ -63,8 +69,8 @@ selfReferenceExpression =
            ("me" / "I") { return { type: "SelfReferenceExpression" } }
 
 functionCallExpression =
-           "call" whitespace _ name:jsIdentifier _ "(" _ args:argList _ ")"
-           { return { type: "FunctionCallExpression", name, args }}
+           "call" whitespace _ name:jsIdentifier _ "(" _ args:argList? _ ")"
+           { return { type: "FunctionCallExpression", name, args : args ? args : [] }}
 
 identifierExpression = jsIdentifier { return { type: "IdentifierExpression", value: text() } }
 
@@ -72,8 +78,13 @@ jsIdentifier = (identifierStart identifierPart*) { return text() }
 identifierStart = [a-zA-Z_$]
 identifierPart = identifierStart / [0-9]
 
+// See note on `featureBody`
+// argList
+// = expression|.., _ "," _|
+// Note that the USAGE of argList now requires a `?`, to mean 0 or 1 of these
+// lists, where the Peggy 3.*.* list syntax supports "zero or more" directly
 argList
-= expression|.., _ "," _|
+  = head:expression tail:(_ "," _ @expression)* { return [head, ...tail]; }
 
 commandDelimeter
 = _ ";" _
