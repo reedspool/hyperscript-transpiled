@@ -23,7 +23,7 @@ export const typesToTranspileFns:
     "Feature": (tree) => `target.addEventListener('${tree.event}', async () => (${typesToTranspileFns["CommandList"](tree.body)}))`,
     "CompoundExpression": ({ first, next }) => `(await ${transpileContents(first)}),${transpileContents(next)}`,
     "StyleAttrExpression": ({ attr, target }) => `${target ? transpileContents(target) : 'target'}.style.${attr}`,
-    "SetExpression": ({ attr, target, value }) => `${transpileContents(target)} = ${transpileContents(value)}`,
+    "SetExpression": ({ target, value }) => `${transpileContents(target)} = ${transpileContents(value)}`,
     "NumberExpression": ({ value }) => `${value}`,
     "SecondsDurationExpression": ({ value }) => `(${transpileContents(value)} * 1000)`,
     "MillisecondsDurationExpression": ({ value }) => `${transpileContents(value)}`,

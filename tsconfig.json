@@ -10,7 +10,11 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noEmit": true,
-    "noUnusedLocals": true,
+
+    /* Disabled because ts-pegjs output has unused variables
+    /* And there's no way to disable this one rule for htis one file
+    /* See https://github.com/microsoft/TypeScript/issues/19139 */
+    /* "noUnusedLocals": true, */
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true

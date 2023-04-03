@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { parse } from './parser';
 import { transpile } from "./transpiler.js";
 import { InstalledGlobal, run } from "./runtime.js";
@@ -11,7 +11,6 @@ const wrap = (text: string) =>
         (text2: string, ...args: any[]) =>
             fn(text + text2, ...args)
 const given = wrap('Given ')(describe);
-const t7e = (program: string) => transpile(Parser.parse(program))
 const exec = async (program: string, target?: Element) => {
     let parsed, transpiled;
     try {
@@ -72,7 +71,7 @@ given("a runtime", async () => {
         let mobal: { ____: Partial<InstalledGlobal> } = global as any
         mobal.____ = { wait }
         useFakeTimers()
-        const output = exec('wait 1234ms then log "hello"')
+        exec('wait 1234ms then log "hello"')
         expect(console.log).not.toHaveBeenCalled()
         advanceTimersByTime(1232);
         expect(console.log).not.toHaveBeenCalled()
@@ -101,7 +100,6 @@ given("a runtime", async () => {
         expect(output, "it returns a JS value").toEqual(3.14);
     }
     {
-        const next = () => ({ style: { fontSize: 3.14 } })
         let mobal: { ____: InstalledGlobal; document: { body: Element } } = global as any
         mobal.____ = { next: fn() } as any as InstalledGlobal;
         mobal.document = { body: {} as Element };
@@ -169,6 +167,8 @@ given("a runtime", async () => {
         expect(output2, "it calls addEventListener on target").toBe(target2)
         expect(target2.addEventListener, "it calls addEventListener").toHaveBeenCalledTimes(1)
 
+        // We want to grab the listener which was added to addEventListener
+        //@ts-ignore mock is definitely there, but it's untyped in Vitest unfortunately.
         const [_, listener] = target2.addEventListener.mock.calls[0]
         spyOn(console, 'log').mockImplementation(() => {})
         expect(typeof listener).toEqual("function")
@@ -198,6 +198,8 @@ given("a runtime", async () => {
         expect(output2, "it calls addEventListener on target").toBe(target2)
         expect(target2.addEventListener, "it calls addEventListener").toHaveBeenCalledTimes(1)
 
+        // We want to grab the listener which was added to addEventListener
+        //@ts-ignore mock is definitely there, but it's untyped in Vitest unfortunately.
         const [_, listener] = target2.addEventListener.mock.calls[0]
         spyOn(console, 'log').mockImplementation(() => {})
         expect(typeof listener).toEqual("function")
