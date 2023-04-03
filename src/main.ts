@@ -1,24 +1,35 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+import { parse } from './hyperscript-transpiler/parser';
+import { transpile } from "./hyperscript-transpiler/transpiler";
+import { install, run } from "./hyperscript-transpiler/runtime";
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+install(window)
+window.exec = async (program: string, target?: Element) => {
+  let parsed, transpiled;
+  try {
+    parsed = parse(program)
+  } catch (e) {
+    throw new Error(`Error parsing \`${program}\`: ${e}`)
+  }
+  try {
+    transpiled = transpile(parsed)
+  } catch (e) {
+    throw new Error(`Error transpiling \`${program}\`: ${e}`)
+  }
+  try {
+    return await run(transpiled, target);
+  } catch (e) {
+    throw new Error(`Error running \`${program}\`, transpiled \`${transpiled}\`: ${e}`)
+  }
+}
+
+window.document.addEventListener('DOMContentLoaded', () => {
+  const targets = document.querySelectorAll('[_]')
+  Array.prototype.forEach.call(targets, (target) => {
+    const source = target.getAttribute('_');
+    const transpiled = transpile(parse(source));
+    target.setAttribute('transpiled', transpiled)
+    run(transpiled, target)
+  })
+})

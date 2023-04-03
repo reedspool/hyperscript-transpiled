@@ -1,13 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
+    <title>Hyperscript Transpiled to JS Experiment</title>
+</head>
+
+<body>
     <script type="module" src="/src/main.ts"></script>
-  </body>
+
+    <p>Experimenting with a Hyperscript-like language transpiled</p>
+
+    <p><strong>NOTE</strong> that you can see each source and the transpiled JS if
+        you inspect the attributes of each button.</p>
+
+    <p>Status: <span id="js-status">Loading...</span>
+
+        <script type="module">
+            window.exec('log "Transpiler executing..."') // if this doesn't throw...
+            document.querySelector("#js-status").innerHTML = "Running."
+        </script>
+
+    <p>Now to test applying code to a button on-click.</p>
+
+    <div><button _='on click log "you clicked me!"'>Click to log</button></div>
+
+    <p>Can we do something with our click? How about calling a JS globally defined function?</p>
+
+    <script type="module">
+        window.turnNextRed = (self) => {
+            const elt = ____.next(self, document.body, "[target]", false)
+            window.turnRed(elt)
+        }
+    </script>
+    <div><button _='on click call turnNextRed(me)'>Click to turn the next thing red</button></div>
+
+    <div target>I'll turn red</div>
+
+    <p>How about the same thing, but more hyperscript?</p>
+
+    <script type="module">
+        window.turnRed = (elt) => {
+            elt.style.color = 'red';
+        }
+    </script>
+    <div><button _='on click call turnRed(next "[target]")'>Click to turn the next thing red</button></div>
+
+    <div target>I'll turn red</div>
+
+    <p>How about the same thing, but all hyperscript?</p>
+
+    <div><button _='on click set *color of next "[target]" to "red"'>Click to turn the next thing red</button></div>
+
+    <div target>I'll turn red</div>
+
+    <p>How about the same thing, but multi-line hyperscript?</p>
+
+    <div><button _='on click
+                          set *color of next "[target]" to "red"'>Click to turn the next thing red</button></div>
+
+    <div target>I'll turn red</div>
+
+    <p>How about the same thing, but with an upfront delay?</p>
+
+    <div><button _='on click wait 1s then set *color of next "[target]" to "red"'>Click to turn the next thing
+            red</button></div>
+
+    <div target>I'll turn red</div>
+</body>
+
 </html>
