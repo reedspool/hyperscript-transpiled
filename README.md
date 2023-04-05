@@ -35,7 +35,7 @@ flowchart LR
     peggy-->parser
 ```
 
-## Test
+## Unit/Integration Tests
 
 NOTE: If you change the parser at all, you'll need to run `npm run generate_parser`
 before you run the tests.
