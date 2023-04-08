@@ -25,3 +25,8 @@ dist-ssr
 
 #vitest instanbul coverage
 coverage/
+
+# From playwright init
+/test-results/
+/playwright-report/
+/playwright/.cache/
