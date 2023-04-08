@@ -1505,7 +1505,7 @@ function peg$parse(input: string, options?: ParseOptions) {
       if (s2 as any !== peg$FAILED) {
         s3 = peg$parse_();
         if (s3 as any !== peg$FAILED) {
-          s4 = peg$parsejsIdentifier();
+          s4 = peg$parseidentifierExpression();
           if (s4 as any !== peg$FAILED) {
             s5 = peg$parse_();
             if (s5 as any !== peg$FAILED) {

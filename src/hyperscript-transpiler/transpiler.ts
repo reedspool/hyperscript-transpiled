@@ -39,7 +39,7 @@ export const typesToTranspileFns:
     "LogExpression": ({ args }) => `(last = console.log(${args.length > 0 ? args.map(___).join(", ") : ""}))`,
     "CommandList": (array) => array.map(___).join(';'),
     "SelfReferenceExpression": ({}) => `(last = target)`,
-    "FunctionCallExpression": ({ name, args }) => `last = ${name}(${args.map(___).join(", ")})`,
+    "FunctionCallExpression": ({ name, args }) => `last = ${___(name)}(${args.map(___).join(", ")})`,
     "IdentifierExpression":
         ({ value, next }) => `${value}${next ? next.type === "IdentifierExpression"
             ? `.${___(next)}`

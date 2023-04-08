@@ -77,6 +77,7 @@ given("a transpiler", () => {
         expect(t('I'), "`I` reflects the target").toMatch(/\(?target\)?.*target/)
         expect(t('call myFunc()'), "the function name is present").toMatch(/myFunc/)
         expect(t('call myFunc()')).toMatch(/myFunc\s*\(\s*\)/)
+        expect(t('call myObj.myFunc()')).toMatch(/myObj.*myFunc\s*\(\s*\)/)
         expect(t('call myFunc(a, b, c)'), "the function is called with arguments").toMatch(/myFunc\s*\(\s*a\s*,\s*b\s*,\s*c\s*\)/)
     })
 })

@@ -150,31 +150,38 @@ export const tests:
         {
             then: 'it can parse a function call expression with no arguments',
             src: 'call myFunc()',
-            afterParse: { type: "FunctionCallExpression", name: "myFunc", args: [] },
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: null, value: "myFunc" }, args: [] },
+            afterTransform: "same"
+        },
+
+        {
+            then: 'it can parse a function call expression from a dotted identifier',
+            src: 'call window.myFunc()',
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: { type: "IdentifierExpression", next: null, value: "myFunc" }, value: "window" }, args: [] },
             afterTransform: "same"
         },
         {
             then: 'it can parse a function call expression with one argument',
             src: 'call func(n)',
-            afterParse: { type: "FunctionCallExpression", name: "func", args: [{ type: "IdentifierExpression", next: null, value: "n" }] },
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: null, value: "func" }, args: [{ type: "IdentifierExpression", next: null, value: "n" }] },
             afterTransform: "same"
         },
         {
             then: 'it can parse a function call expression with multiple arguments',
             src: 'call my_callable(arg1, arg2)',
-            afterParse: { type: "FunctionCallExpression", name: "my_callable", args: [{ type: "IdentifierExpression", next: null, value: "arg1" }, { type: "IdentifierExpression", next: null, value: "arg2" }] },
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: null, value: "my_callable" }, args: [{ type: "IdentifierExpression", next: null, value: "arg1" }, { type: "IdentifierExpression", next: null, value: "arg2" }] },
             afterTransform: "same"
         },
         {
             then: 'it can parse a function call expression with a string argument',
             src: 'call func("abcd")',
-            afterParse: { type: "FunctionCallExpression", name: "func", args: [{ type: "StringExpression", value: "abcd" }] },
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: null, value: "func" }, args: [{ type: "StringExpression", value: "abcd" }] },
             afterTransform: "same"
         },
         {
             then: 'it can parse a function call expression with a number argument',
             src: 'call func(1)',
-            afterParse: { type: "FunctionCallExpression", name: "func", args: [{ type: "NumberExpression", value: "1" }] },
+            afterParse: { type: "FunctionCallExpression", name: { type: "IdentifierExpression", next: null, value: "func" }, args: [{ type: "NumberExpression", value: "1" }] },
             afterTransform: "same"
         }
     ];

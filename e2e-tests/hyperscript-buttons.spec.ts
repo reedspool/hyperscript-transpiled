@@ -128,3 +128,14 @@ test('Global window variables', async ({ page }, testInfo) => {
 
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
+
+test('Call function with dotted identifier', async ({ page }, testInfo) => {
+    await page.goto(`http://localhost:${testInfo?.config?.webServer?.port}/`);
+
+    // Click the log button.
+    const indicator = page.locator('[hs-indicate-global-window-function-call]');
+    const container = page.locator('tr', { has: indicator })
+    await container.getByRole('button').click();
+
+    await expect(indicator).toHaveCSS('color', GREEN_CSS)
+});

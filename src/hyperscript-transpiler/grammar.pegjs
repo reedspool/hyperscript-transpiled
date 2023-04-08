@@ -72,7 +72,7 @@ selfReferenceExpression =
            ("me" / "I") { return { type: "SelfReferenceExpression" } }
 
 functionCallExpression =
-           "call" whitespace _ name:jsIdentifier _ "(" _ args:argList? _ ")"
+           "call" whitespace _ name:identifierExpression _ "(" _ args:argList? _ ")"
            { return { type: "FunctionCallExpression", name, args : args ? args : [] }}
 
 identifierExpression =

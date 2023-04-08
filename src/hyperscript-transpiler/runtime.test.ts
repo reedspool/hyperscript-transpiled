@@ -227,6 +227,15 @@ given("a runtime", async () => {
         expect(output, "it returns the set value of a dotted identifier").toEqual("ciao")
     }
     {
+        const testFn = fn().mockImplementation(() => { return '!'; });
+        let mobal: { window: Window } = global as any
+        mobal.window = { test: testFn } as any
+        const output = await exec('call window.test("meow")')
+        expect(output, "it returns what the function returns").toEqual("!")
+        expect(testFn, "it calls the function").toHaveBeenCalledTimes(1)
+        expect(testFn, "it calls the function with the right args").toHaveBeenNthCalledWith(1, "meow")
+    }
+    {
         spyOn(console, 'log').mockImplementation(() => {})
         const output = await exec('set msg to "hola" then log msg')
         expect(output, "it returns undefined").toEqual(undefined)
