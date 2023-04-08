@@ -4,7 +4,7 @@ toplevel =
 empty = _ { return { type: "EmptyProgram" }  }
 
 feature =
-        descriptor:featureDescriptor _ NL* _ body:featureBody
+        descriptor:featureDescriptor whitespace _ body:featureBody
         { return { type: 'Feature', event: descriptor.event, body } }
 
 featureDescriptor =
@@ -18,10 +18,13 @@ featureDescriptor =
 //   = compoundExpression|1.., commandDelimeter|
 // For now, using this stand-in:
 featureBody
-  = head:compoundExpression tail:(commandDelimeter @compoundExpression)* { return [head, ...tail]; }
+  = head:compoundExpression tail:(commandDelimeter @compoundExpression)* commandDelimeter? { return [head, ...tail]; }
 
-compoundExpression = first:expression next:(whitespace _ "then" whitespace _ expression)? {
-                   return next ? { type: "CompoundExpression", first, next: next[5] } : first
+commandDelimeter
+= _ ";" _
+
+compoundExpression = first:expression next:(whitespace _ "then" whitespace _ @expression)? {
+                   return next ? { type: "CompoundExpression", first, next } : first
 }
 
 expression =
@@ -86,9 +89,6 @@ identifierPart = identifierStart / [0-9]
 argList
   = head:expression tail:(_ "," _ @expression)* { return [head, ...tail]; }
 
-commandDelimeter
-= _ ";" _
-/ _ NL _
 
 eventName =
           "click" /
@@ -97,7 +97,7 @@ eventName =
 NL = [\n]
 // Disregarded whitespace
 _ = whitespace*
-whitespace = [ \t]
+whitespace = [ \n\t]
 
 // BEGIN Stolen from PEG.js JavaScript grammar example
 // https://github.com/pegjs/pegjs/blob/master/examples/javascript.pegjs

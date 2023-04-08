@@ -5,18 +5,23 @@ import { transpile } from "./hyperscript-transpiler/transpiler";
 import { install, run } from "./hyperscript-transpiler/runtime";
 
 install(window)
-window.exec = async (program: string, target?: Element) => {
-  let parsed, transpiled;
+window.parse = (program: string) => {
   try {
-    parsed = parse(program)
+    return parse(program)
   } catch (e) {
     throw new Error(`Error parsing \`${program}\`: ${e}`)
   }
+}
+window.transpile = (program: string) => {
+  const parsed = window.parse(program);
   try {
-    transpiled = transpile(parsed)
+    return transpile(parsed);
   } catch (e) {
     throw new Error(`Error transpiling \`${program}\`: ${e}`)
   }
+}
+window.exec = async (program: string, target?: Element) => {
+  const transpiled = window.transpile(program);
   try {
     return await run(transpiled, target);
   } catch (e) {
@@ -28,8 +33,8 @@ window.document.addEventListener('DOMContentLoaded', () => {
   const targets = document.querySelectorAll('[_]')
   Array.prototype.forEach.call(targets, (target) => {
     const source = target.getAttribute('_');
-    const transpiled = transpile(parse(source));
+    const transpiled = window.transpile(source);
     target.setAttribute('transpiled', transpiled)
-    run(transpiled, target)
+    window.exec(source, target)
   })
 })

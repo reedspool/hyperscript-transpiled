@@ -104,7 +104,7 @@ export const tests:
         },
         {
             then: 'it can parse a multi-line on-click feature ',
-            src: 'on click\nlog "hello"\nlog',
+            src: 'on click\nlog "hello";\nlog;',
             afterParse: { type: "Feature", event: "click", body: [{ type: "LogExpression", args: [{ type: "StringExpression", value: 'hello' }] }, { type: "LogExpression", args: [] }] },
             afterTransform: "same"
         },

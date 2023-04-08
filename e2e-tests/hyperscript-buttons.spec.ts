@@ -118,3 +118,16 @@ test('Delay 1 second', async ({ page, context }, testInfo) => {
     });
     await expect(indicator).toHaveCSS('color', GREEN_CSS, { timeout: 1 /* ms */ })
 });
+
+test('Local variables', async ({ page }, testInfo) => {
+    await page.goto(`http://localhost:${testInfo?.config?.webServer?.port}/`);
+
+    // Click the log button.
+    const indicator = page.locator('[hs-indicate-local-var]');
+    const container = page.locator('tr', { has: indicator })
+    const button = container.getByRole('button')
+    await button.click();
+
+    // Expects the URL to contain intro.
+    await expect(indicator).toHaveCSS('color', GREEN_CSS)
+});

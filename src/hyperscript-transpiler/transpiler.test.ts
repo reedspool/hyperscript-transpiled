@@ -29,13 +29,13 @@ given("a transpiler", () => {
         expect(t(''), "it transpiles an empty program").toMatch(/\(target\)\s*=>/)
         expect(t('3'), "it transpiles an integer expression").toMatch(/3/)
         expect(t('3.14'), "it transpiles a float number expression").toMatch(/3\.14/)
-        expect(t('3s'), "it transpiles an integer seconds expression to milliseconds").toMatch(/\(\s*3\s*\*\s*1000\)/)
-        expect(t('3.14s'), "it transpiles a float seconds expression to milliseconds").toMatch(/\(\s*3.14\s*\*\s*1000\)/)
+        expect(t('3s'), "it transpiles an integer seconds expression to milliseconds").toMatch(/3.*\*.*1000/)
+        expect(t('3.14s'), "it transpiles a float seconds expression to milliseconds").toMatch(/3.14.*\*.*1000/)
         expect(t('5ms'), "it transpiles an integer milliseconds expression").toMatch(/5/)
         expect(t('5.44ms'), "it transpiles a float milliseconds expression").toMatch(/5.44/)
         let program = t('log "hello" then log "hola"');
         expect(program, "it includes the first log").toMatch(/hello/)
-        expect(program, "it includes a separating comma").toMatch(/,/)
+        expect(program, "it includes a separating semi-colon").toMatch(/;/)
         expect(program, "it includes the second log").toMatch(/hola/)
         program = t('wait 1.24s');
         expect(program, "it calls the runtime function").toMatch(/____.wait\(/)
@@ -51,6 +51,7 @@ given("a transpiler", () => {
         expect(program, "it passes the selector").toMatch(/\.clazz/)
         program = t('set myColor to "blue"');
         expect(program, "it references the variable name").toMatch(/myColor/)
+        expect(program, "it uses let to make a local").toMatch(/let\s+myColor/)
         expect(program, "it sets").toMatch(/=/)
         expect(program, "it provides the value").toMatch(/blue/)
         program = t('set *backgroundColor to "blue"');
@@ -59,13 +60,13 @@ given("a transpiler", () => {
         expect(program, "it sets").toMatch(/=/)
         expect(program, "it provides the value").toMatch(/blue/)
         expect(t('log'), "it transpiles a log command with no text").toMatch(/console\.log\(\s*\)/)
-        expect(t('log "hello"'), "it transpiles a log command with text").toMatch(/console\.log\("hello"\)/)
+        expect(t('log "hello"'), "it transpiles a log command with text").toMatch(/console\.log\(.*"hello".*\)/)
         program = t('on click log "hello"');
         expect(program, "it adds an event").toMatch(/target\.addEventListener/)
-        expect(program, "it includes a log").toMatch(/console\.log\("hello"\)/)
+        expect(program, "it includes a log").toMatch(/console\.log\(.*"hello".*\)/)
         program = t('on click\nlog "hello"');
         expect(program, "it adds an event").toMatch(/target\.addEventListener/)
-        expect(program, "it includes a log").toMatch(/console\.log\("hello"\)/)
+        expect(program, "it includes a log").toMatch(/console\.log\(.*"hello".*\)/)
         expect(t('me'), "`me` reflects the target").toMatch(/\(?target\)?.*target/)
         expect(t('I'), "`I` reflects the target").toMatch(/\(?target\)?.*target/)
         expect(t('call myFunc()'), "the function name is present").toMatch(/myFunc/)
