@@ -9,14 +9,66 @@
 
 <body>
     <script type="module" src="/src/main.ts"></script>
+    <h1>Hyperscript Transpiled</h1>
 
-    <p>Experimenting with a Hyperscript-like language transpiled</p>
+    <p>
+        Test page for an experiment transpiling
+        <a href="https://hyperscript.org" target="_blank">the Hyperscript language</a>
+        to JavaScript before execution.
+    </p>
+    <p>
+        The real Hyperscript interprets every expression at runtime. A downside
+        of this strategy is that the more complex the source program, the more the
+        interpreter's bookkeeping code is run.
+    </p>
+    <p>
+        Ultimately, Hyperscript executes reasonable JavaScript to achieve the
+        intent of the given Hyperscript source code. So what if we could craft that
+        reasonable JavaScript in advance? This transpiler teaks in Hyperscript
+        source and spits out reasonable JavaScript.
+    </p>
 
-    <p><strong>NOTE</strong> that you can see each source and the transpiled JS if
-        you inspect the attributes of each button.</p>
+    <p>
+        The definition of "reasonable" is subject to change as this project
+        advances. Right now the goal for "reasonable" is:
+    </p>
+
+    <ol>
+        <li>the output code is no more complex than it must be</li>
+        <li>
+            when run, the output code achieves the effect intended in the
+            Hyperscript source
+        </li>
+    </ol>
+
+    <p>Out of scope for "reasonble" right now:</p>
+
+    <ol>
+        <li>the output code is easy or pleasant to read for humans</li>
+        <li>the output code is optimized in any way</li>
+    </ol>
 
     <p><a href="https://github.com/reedspool/hyperscript-transpiled" target="_blank">GitHub repo</a>
         with more details in README.</p>
+
+    <h2>Examples</h2>
+
+    <p>
+        Below is a table full of examples of Hyperscript. The primary
+        audience for this section are automated
+        <a href="https://github.com/reedspool/hyperscript-transpiled#end-to-end-tests" target="_blank">
+            End To End</a> tests.
+    </p>
+
+    <p><strong>TRY</strong> inspecting each of the interactable elements. See the
+        Hyperscript source AND its transpiled JS both as HTML attributes on
+        each element.</p>
+
+    <p><strong>TRY</strong> clicking the buttons. That's exactly what the
+        automated tests do.</p>
+
+    <p><strong>SEE</strong> the glorious indicator column change to green on success.
+        I'll build more interesting interactions as the transpiler fills out.</p>
 
     <table>
         <thead>

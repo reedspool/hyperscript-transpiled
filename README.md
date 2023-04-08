@@ -1,5 +1,7 @@
 # Hyperscript Transpiled
 
+Live [https://hyperscript-transpiled.netlify.app/]
+
 Experiment to transpile [`_hyperscript`](https://hyperscript.org) into JS.
 
 This repository is running TypeScript, compiling via Vite.JS
