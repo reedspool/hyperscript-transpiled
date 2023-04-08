@@ -117,7 +117,7 @@ export const tests:
         {
             then: 'it can parse a underscore identifier expression ',
             src: '_',
-            afterParse: { type: "IdentifierExpression", next: null, next: null, value: "_" },
+            afterParse: { type: "IdentifierExpression", next: null, value: "_" },
             afterTransform: "same"
         },
         {
