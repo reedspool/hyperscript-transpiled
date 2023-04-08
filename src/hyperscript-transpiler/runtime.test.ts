@@ -213,8 +213,18 @@ given("a runtime", async () => {
         restoreAllMocks();
     }
     {
+        const output = await exec('set msg to "hola" then msg')
+        expect(output, "it returns the local variable's value").toEqual("hola")
+    }
+    {
         const output = await exec('set msg to "hola"')
         expect(output, "it returns the set value").toEqual("hola")
+    }
+    {
+        let mobal: { window: Window } = global as any
+        mobal.window = {} as any
+        const output = await exec('set window.test to "ciao" then window.test')
+        expect(output, "it returns the set value of a dotted identifier").toEqual("ciao")
     }
     {
         spyOn(console, 'log').mockImplementation(() => {})

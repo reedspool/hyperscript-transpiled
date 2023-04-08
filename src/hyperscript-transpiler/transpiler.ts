@@ -27,7 +27,7 @@ export const typesToTranspileFns:
     "StyleAttrExpression": ({ attr, target }, { leftHand } = defaultOpts) => `${leftHand ? '' : '(last = '}${target ? ___(target) : 'target'}.style.${attr}${leftHand ? '' : ')'}`,
     "SetExpression": ({ target, value }) =>
         target.type == "IdentifierExpression"
-            ? `let ${___(target)} = ${___(value)}`
+            ? `${target.next ? '' : 'let '}${___(target)} = ${___(value)}`
             : target.type == "StyleAttrExpression"
                 ? `${___(target, { leftHand: true })} = ${___(value)}`
                 : `Should have failed to parse set expression for ${target.type}`,
@@ -40,6 +40,10 @@ export const typesToTranspileFns:
     "CommandList": (array) => array.map(___).join(';'),
     "SelfReferenceExpression": ({}) => `(last = target)`,
     "FunctionCallExpression": ({ name, args }) => `last = ${name}(${args.map(___).join(", ")})`,
-    "IdentifierExpression": ({ value }) => `${value}`,
+    "IdentifierExpression":
+        ({ value, next }) => `${value}${next ? next.type === "IdentifierExpression"
+            ? `.${___(next)}`
+            : `Should have failed to parse identifier part ${next}`
+            : ''}`,
     "StringExpression": ({ value }) => `(last = "${value}")`
 }

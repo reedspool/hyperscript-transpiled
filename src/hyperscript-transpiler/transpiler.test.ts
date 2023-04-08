@@ -33,7 +33,13 @@ given("a transpiler", () => {
         expect(t('3.14s'), "it transpiles a float seconds expression to milliseconds").toMatch(/3.14.*\*.*1000/)
         expect(t('5ms'), "it transpiles an integer milliseconds expression").toMatch(/5/)
         expect(t('5.44ms'), "it transpiles a float milliseconds expression").toMatch(/5.44/)
-        let program = t('log "hello" then log "hola"');
+        expect(t('identifier'), "it transpiles an identifier").toMatch(/identifier/)
+        expect(t('$A___$'), "it transpiles an interesting identifier").toMatch(/\$A___\$/)
+        let program = t('first.second');
+        expect(program, "it includes the first part of a dotted identifier").toMatch(/first/)
+        expect(program, "it includes the second part of a dotted identifier").toMatch(/second/)
+        expect(program, "it includes a complete dotted identifier").toMatch(/first.*\.second/)
+        program = t('log "hello" then log "hola"');
         expect(program, "it includes the first log").toMatch(/hello/)
         expect(program, "it includes a separating semi-colon").toMatch(/;/)
         expect(program, "it includes the second log").toMatch(/hola/)

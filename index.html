@@ -99,6 +99,16 @@
                 </td>
                 <td hs-indicate-local-var><strong>?</strong></td>
             </tr>
+            <tr>
+                <td>9</td>
+                <td>Global (via <code>window\.</code>) and local variables</td>
+                <td><button _='on click
+                              set window.myColor to "green";
+                              set elt to next "[hs-indicate-global-window-var]";
+                              set *color of elt to window.myColor;'>Click</button>
+                </td>
+                <td hs-indicate-global-window-var><strong>?</strong></td>
+            </tr>
         </tbody>
     </table>
 </body>
