@@ -27,13 +27,13 @@ export const tests:
         {
             then: 'it can parse a targeted style attr expression',
             src: '*color of abcd',
-            afterParse: { type: "StyleAttrExpression", attr: 'color', target: { type: "IdentifierExpression", value: "abcd" } },
+            afterParse: { type: "StyleAttrExpression", attr: 'color', target: { type: "IdentifierExpression", next: null, value: "abcd" } },
             afterTransform: "same"
         },
         {
             then: 'it can parse setting a variable to a string',
             src: 'set myColor to "blue"',
-            afterParse: { type: "SetExpression", target: { type: "IdentifierExpression", value: "myColor" }, value: { type: "StringExpression", value: "blue" } },
+            afterParse: { type: "SetExpression", target: { type: "IdentifierExpression", next: null, value: "myColor" }, value: { type: "StringExpression", value: "blue" } },
             afterTransform: "same"
         },
         {
@@ -45,7 +45,7 @@ export const tests:
         {
             then: 'it can parse setting a targeted style attr expression to a string',
             src: 'set *color of xxx to "blue"',
-            afterParse: { type: "SetExpression", target: { type: "StyleAttrExpression", attr: 'color', target: { type: "IdentifierExpression", value: "xxx" } }, value: { type: "StringExpression", value: "blue" } },
+            afterParse: { type: "SetExpression", target: { type: "StyleAttrExpression", attr: 'color', target: { type: "IdentifierExpression", next: null, value: "xxx" } }, value: { type: "StringExpression", value: "blue" } },
             afterTransform: "same"
         },
         {
@@ -111,25 +111,34 @@ export const tests:
         {
             then: 'it can parse a dollar sign identifier expression ',
             src: '$',
-            afterParse: { type: "IdentifierExpression", value: "$" },
+            afterParse: { type: "IdentifierExpression", next: null, value: "$" },
             afterTransform: "same"
         },
         {
             then: 'it can parse a underscore identifier expression ',
             src: '_',
-            afterParse: { type: "IdentifierExpression", value: "_" },
+            afterParse: { type: "IdentifierExpression", next: null, next: null, value: "_" },
             afterTransform: "same"
         },
         {
             then: 'it can parse a single-letter identifier expression ',
             src: 'x',
-            afterParse: { type: "IdentifierExpression", value: "x" },
+            afterParse: { type: "IdentifierExpression", next: null, value: "x" },
             afterTransform: "same"
         },
         {
             then: 'it can parse a multi-letter identifier expression ',
             src: 'x$_abl',
-            afterParse: { type: "IdentifierExpression", value: "x$_abl" },
+            afterParse: { type: "IdentifierExpression", next: null, value: "x$_abl" },
+            afterTransform: "same"
+        },
+        {
+            then: 'it can parse multi-part identifier expression',
+            src: 'first.second',
+            afterParse: {
+                type: "IdentifierExpression", value: "first",
+                next: { type: "IdentifierExpression", next: null, value: "second" }
+            },
             afterTransform: "same"
         },
         {
@@ -147,13 +156,13 @@ export const tests:
         {
             then: 'it can parse a function call expression with one argument',
             src: 'call func(n)',
-            afterParse: { type: "FunctionCallExpression", name: "func", args: [{ type: "IdentifierExpression", value: "n" }] },
+            afterParse: { type: "FunctionCallExpression", name: "func", args: [{ type: "IdentifierExpression", next: null, value: "n" }] },
             afterTransform: "same"
         },
         {
             then: 'it can parse a function call expression with multiple arguments',
             src: 'call my_callable(arg1, arg2)',
-            afterParse: { type: "FunctionCallExpression", name: "my_callable", args: [{ type: "IdentifierExpression", value: "arg1" }, { type: "IdentifierExpression", value: "arg2" }] },
+            afterParse: { type: "FunctionCallExpression", name: "my_callable", args: [{ type: "IdentifierExpression", next: null, value: "arg1" }, { type: "IdentifierExpression", next: null, value: "arg2" }] },
             afterTransform: "same"
         },
         {

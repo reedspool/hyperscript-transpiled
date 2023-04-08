@@ -272,7 +272,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c50 = ")";
   const peg$c51 = peg$literalExpectation(")", false);
   const peg$c52 = function(name: any, args: any): any { return { type: "FunctionCallExpression", name, args : args ? args : [] }};
-  const peg$c53 = function(): any { return { type: "IdentifierExpression", value: text() } };
+  const peg$c53 = function(head: any, next: any): any { return { type: "IdentifierExpression", value: head, next } };
   const peg$c54 = function(): any { return text() };
   const peg$c55 = /^[a-zA-Z_$]/;
   const peg$c56 = peg$classExpectation([["a", "z"], ["A", "Z"], "_", "$"], false, false);
@@ -1584,7 +1584,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   }
 
   function peg$parseidentifierExpression(): any {
-    let s0, s1;
+    let s0, s1, s2, s3, s4, s5, s6;
 
     const key = peg$currPos * 32 + 20;
     const cached: Cached = peg$resultsCache[key];
@@ -1598,10 +1598,53 @@ function peg$parse(input: string, options?: ParseOptions) {
     s0 = peg$currPos;
     s1 = peg$parsejsIdentifier();
     if (s1 as any !== peg$FAILED) {
-      peg$savedPos = s0;
-      s1 = peg$c53();
+      s2 = peg$currPos;
+      s3 = peg$parse_();
+      if (s3 as any !== peg$FAILED) {
+        if (input.charCodeAt(peg$currPos) === 46) {
+          s4 = peg$c38;
+          peg$currPos++;
+        } else {
+          s4 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c39); }
+        }
+        if (s4 as any !== peg$FAILED) {
+          s5 = peg$parse_();
+          if (s5 as any !== peg$FAILED) {
+            s6 = peg$parseidentifierExpression();
+            if (s6 as any !== peg$FAILED) {
+              s2 = s6;
+            } else {
+              peg$currPos = s2;
+              s2 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s2;
+            s2 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s2;
+          s2 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s2;
+        s2 = peg$FAILED;
+      }
+      if (s2 as any === peg$FAILED) {
+        s2 = null;
+      }
+      if (s2 as any !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c53(s1, s2);
+        s0 = s1;
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
     }
-    s0 = s1;
 
     peg$resultsCache[key] = { nextPos: peg$currPos, result: s0 };
 

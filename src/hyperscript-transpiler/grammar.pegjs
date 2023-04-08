@@ -75,7 +75,9 @@ functionCallExpression =
            "call" whitespace _ name:jsIdentifier _ "(" _ args:argList? _ ")"
            { return { type: "FunctionCallExpression", name, args : args ? args : [] }}
 
-identifierExpression = jsIdentifier { return { type: "IdentifierExpression", value: text() } }
+identifierExpression =
+           head:jsIdentifier next:(_ "." _ @identifierExpression)?
+           { return { type: "IdentifierExpression", value: head, next } }
 
 jsIdentifier = (identifierStart identifierPart*) { return text() }
 identifierStart = [a-zA-Z_$]
