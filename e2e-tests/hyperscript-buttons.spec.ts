@@ -31,10 +31,8 @@ test('log button logs', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-log]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
     await expect(logCount).toBe(1);
 });
 
@@ -44,10 +42,8 @@ test('JS call button turns the indicator red', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-global-js-call]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
 
@@ -57,10 +53,8 @@ test('Use `next` expression', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-next-expression]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
 
@@ -70,10 +64,8 @@ test('Set color style', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-set-color-style]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
 
@@ -83,10 +75,8 @@ test('Multi-line on-click feature', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-multi-line]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
 
@@ -106,9 +96,7 @@ test('Delay 1 second', async ({ page, context }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-delay]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
-
+    await container.getByRole('button').click();
 
     // Ensure controlled time
     await expect(indicator).toHaveCSS('color', BLACK_CSS, { timeout: 1 /* ms */ })
@@ -125,9 +113,8 @@ test('Local variables', async ({ page }, testInfo) => {
     // Click the log button.
     const indicator = page.locator('[hs-indicate-local-var]');
     const container = page.locator('tr', { has: indicator })
-    const button = container.getByRole('button')
-    await button.click();
+    await container.getByRole('button').click();
 
-    // Expects the URL to contain intro.
+
     await expect(indicator).toHaveCSS('color', GREEN_CSS)
 });
