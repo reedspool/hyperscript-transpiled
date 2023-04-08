@@ -18,59 +18,79 @@
     <p><a href="https://github.com/reedspool/hyperscript-transpiled" target="_blank">GitHub repo</a>
         with more details in README.</p>
 
-    <p>Status: <span id="js-status">Loading...</span>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Button</th>
+                <th>Indicator</th>
+            </tr>
+        </thead>
 
-        <script type="module">
-            window.exec('log "Transpiler executing..."') // if this doesn't throw...
-            document.querySelector("#js-status").innerHTML = "Running."
-        </script>
+        <tbody>
+            <tr>
+                <script type="module">
+                    window.exec('log "Transpiler executing..."') // if this doesn't throw...
+                    document.querySelector("[hs-indicate-exec-on-load]").innerHTML = "Good"
+                </script>
+                <td>1</td>
+                <td>Immediate <code>exec('log "something"')</code> works</td>
+                <td>On load</td>
+                <td hs-indicate-exec-on-load>Waiting...</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Log on click</td>
+                <td><button _='on click log "you clicked me!"'>Click</button></td>
+                <td hs-indicate-log>See Developer Console</td>
+            </tr>
+            <tr>
+                <script type="module">
+                    window.turnGreen = (elt) => {
+                        elt.style.color = 'green';
+                    }
 
-    <p>Now to test applying code to a button on-click.</p>
-
-    <div><button _='on click log "you clicked me!"'>Click to log</button></div>
-
-    <p>Can we do something with our click? How about calling a JS globally defined function?</p>
-
-    <script type="module">
-        window.turnNextRed = (self) => {
-            const elt = ____.next(self, document.body, "[target]", false)
-            window.turnRed(elt)
-        }
-    </script>
-    <div><button _='on click call turnNextRed(me)'>Click to turn the next thing red</button></div>
-
-    <div target>I'll turn red</div>
-
-    <p>How about the same thing, but more hyperscript?</p>
-
-    <script type="module">
-        window.turnRed = (elt) => {
-            elt.style.color = 'red';
-        }
-    </script>
-    <div><button _='on click call turnRed(next "[target]")'>Click to turn the next thing red</button></div>
-
-    <div target>I'll turn red</div>
-
-    <p>How about the same thing, but all hyperscript?</p>
-
-    <div><button _='on click set *color of next "[target]" to "red"'>Click to turn the next thing red</button></div>
-
-    <div target>I'll turn red</div>
-
-    <p>How about the same thing, but multi-line hyperscript?</p>
-
-    <div><button _='on click
-                          set *color of next "[target]" to "red"'>Click to turn the next thing red</button></div>
-
-    <div target>I'll turn red</div>
-
-    <p>How about the same thing, but with an upfront delay?</p>
-
-    <div><button _='on click wait 1s then set *color of next "[target]" to "red"'>Click to turn the next thing
-            red</button></div>
-
-    <div target>I'll turn red</div>
+                    window.turnNextGreen = (self) => {
+                        const elt = ____.next(self, document.body, "[hs-indicate-global-js-call]", false)
+                        window.turnGreen(elt)
+                    }
+                </script>
+                <td>3</td>
+                <td>Call a JavaScript global function</td>
+                <td><button _='on click call turnNextGreen(me)'>Click</button></td>
+                <td hs-indicate-global-js-call><strong>?</strong></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Use `next` expression</td>
+                <td><button _='on click call turnGreen(next "[hs-indicate-next-expression]")'>Click</button></td>
+                <td hs-indicate-next-expression><strong>?</strong></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Set color style</td>
+                <td><button _='on click set *color of next "[hs-indicate-set-color-style]" to "green"'>Click</button>
+                </td>
+                <td hs-indicate-set-color-style><strong>?</strong></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Multi-line on-click feature</td>
+                <td><button _='on click
+                          set *color of next "[hs-indicate-multi-line]" to "green"'>Click</button>
+                </td>
+                <td hs-indicate-multi-line><strong>?</strong></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Delay 1s</td>
+                <td><button _='on click wait 1s then set *color of next "[hs-indicate-delay]" to "green"'>Click</button>
+                </td>
+                <td hs-indicate-delay><strong>?</strong></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 </html>

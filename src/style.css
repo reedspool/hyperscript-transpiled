@@ -64,7 +64,7 @@ h1 {
 
 button {
   border-radius: 8px;
-  padding: 0.6em 1.2em;
+  padding: 0.1em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -78,6 +78,29 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+table {
+  width: 100%;
+  max-width: 1011px;
+  text-align: left;
+}
+
+thead th {
+  border-bottom: 1px solid black;
+}
+
+th {
+  font-weight: normal;
+}
+
+th, td {
+  padding: 0.45em;
+}
+
+tbody tr:nth-child(2n+1) {
+  background-color: rgba(0, 0, 0, 0.1)
 }
 
 @media (prefers-color-scheme: light) {
