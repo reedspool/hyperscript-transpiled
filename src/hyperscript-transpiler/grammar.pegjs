@@ -30,6 +30,7 @@ compoundExpression = first:expression next:(whitespace _ "then" whitespace _ @ex
 expression =
            // All the things that start with identifiers ("call", "next", "log")
            // must come before identifier expression
+           addClassExpression /
            selfReferenceExpression /
            setExpression /
            styleAttrExpression /
@@ -49,6 +50,10 @@ logExpression = "log" arg:(whitespace _ expression)?
 
 nextExpression = "next" whitespace _ selector:stringExpression
                { return { type: "NextExpression", selector } }
+
+addClassExpression = "add" whitespace _ "class" whitespace _ classList:stringExpression target:(whitespace _ "to" whitespace _ @expression)? {
+              return { type: "AddClassExpression", classList, target }
+}
 
 setExpression = "set" whitespace _ target:settableExpression whitespace _ "to" whitespace _ value:expression {
               return { type: "SetExpression", target, value }

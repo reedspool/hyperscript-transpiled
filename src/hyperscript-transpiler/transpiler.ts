@@ -25,6 +25,7 @@ export const typesToTranspileFns:
     "Feature": (tree) => `(last = target.addEventListener('${tree.event}', async () => { ${typesToTranspileFns["CommandList"](tree.body)} }))`,
     "CompoundExpression": ({ first, next }) => `${___(first)};${___(next)}`,
     "StyleAttrExpression": ({ attr, target }, { leftHand } = defaultOpts) => `${leftHand ? '' : '(last = '}${target ? ___(target) : 'target'}.style.${attr}${leftHand ? '' : ')'}`,
+    "AddClassExpression": ({ classList, target }) => `(last = ${___(target)}.classList.add(${___(classList)}))`,
     "SetExpression": ({ target, value }) =>
         target.type == "IdentifierExpression"
             ? `${target.next ? '' : 'let '}${___(target)} = ${___(value)}`

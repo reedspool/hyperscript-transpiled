@@ -213,6 +213,15 @@ given("a runtime", async () => {
         restoreAllMocks();
     }
     {
+        const classListAdd = fn();
+        const next = () => ({ classList: { add: classListAdd } })
+        let mobal: { ____: Partial<InstalledGlobal> } = global as any
+        mobal.____ = { next } as any
+        const output = await exec('add class "blue" to next ".not-blue"')
+        expect(output, "it returns undefined").toEqual(undefined)
+        expect(classListAdd, "it calls classList.add").toHaveBeenCalledTimes(1)
+    }
+    {
         const output = await exec('set msg to "hola" then msg')
         expect(output, "it returns the local variable's value").toEqual("hola")
     }

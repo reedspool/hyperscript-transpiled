@@ -52,6 +52,10 @@ given("a transpiler", () => {
         program = t('*backgroundColor of anotherTarget');
         expect(program, "it accesses the style ").toMatch(/\.style\.backgroundColor/)
         expect(program, "it uses the given target").toMatch(/anotherTarget/)
+        program = t('add class "brown" to anotherTarget');
+        expect(program, "it references the given class").toMatch(/brown/)
+        expect(program, "it mentions class").toMatch(/class/)
+        expect(program, "it uses the given target").toMatch(/anotherTarget/)
         program = t('next ".clazz"');
         expect(program, "it calls the runtime function").toMatch(/____.next\(/)
         expect(program, "it passes the selector").toMatch(/\.clazz/)

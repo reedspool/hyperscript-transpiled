@@ -31,6 +31,18 @@ export const tests:
             afterTransform: "same"
         },
         {
+            then: 'it can parse an untargeted `add class` expression',
+            src: 'add class "orange"',
+            afterParse: { type: "AddClassExpression", classList: { type: "StringExpression", value: 'orange' }, target: null },
+            afterTransform: "same"
+        },
+        {
+            then: 'it can parse a targeted `add class` expression',
+            src: 'add class "green" to another1',
+            afterParse: { type: "AddClassExpression", classList: { type: "StringExpression", value: 'green' }, target: { type: "IdentifierExpression", next: null, value: "another1" } },
+            afterTransform: "same"
+        },
+        {
             then: 'it can parse setting a variable to a string',
             src: 'set myColor to "blue"',
             afterParse: { type: "SetExpression", target: { type: "IdentifierExpression", next: null, value: "myColor" }, value: { type: "StringExpression", value: "blue" } },
