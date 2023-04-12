@@ -222,6 +222,15 @@ given("a runtime", async () => {
         expect(classListAdd, "it calls classList.add").toHaveBeenCalledTimes(1)
     }
     {
+        const classListRemove = fn();
+        const next = () => ({ classList: { remove: classListRemove } })
+        let mobal: { ____: Partial<InstalledGlobal> } = global as any
+        mobal.____ = { next } as any
+        const output = await exec('remove class "blue" from next ".not-blue"')
+        expect(output, "it returns undefined").toEqual(undefined)
+        expect(classListRemove, "it calls classList.remove").toHaveBeenCalledTimes(1)
+    }
+    {
         const output = await exec('set msg to "hola" then msg')
         expect(output, "it returns the local variable's value").toEqual("hola")
     }

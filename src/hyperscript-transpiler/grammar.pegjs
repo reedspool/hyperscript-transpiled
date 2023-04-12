@@ -31,6 +31,7 @@ expression =
            // All the things that start with identifiers ("call", "next", "log")
            // must come before identifier expression
            addClassExpression /
+           removeClassExpression /
            selfReferenceExpression /
            setExpression /
            styleAttrExpression /
@@ -53,6 +54,10 @@ nextExpression = "next" whitespace _ selector:stringExpression
 
 addClassExpression = "add" whitespace _ "class" whitespace _ classList:stringExpression target:(whitespace _ "to" whitespace _ @expression)? {
               return { type: "AddClassExpression", classList, target }
+}
+
+removeClassExpression = "remove" whitespace _ "class" whitespace _ classList:stringExpression target:(whitespace _ "from" whitespace _ @expression)? {
+              return { type: "RemoveClassExpression", classList, target }
 }
 
 setExpression = "set" whitespace _ target:settableExpression whitespace _ "to" whitespace _ value:expression {

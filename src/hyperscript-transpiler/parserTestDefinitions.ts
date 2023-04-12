@@ -43,6 +43,18 @@ export const tests:
             afterTransform: "same"
         },
         {
+            then: 'it can parse an untargeted `remove class` expression',
+            src: 'remove class "orange"',
+            afterParse: { type: "RemoveClassExpression", classList: { type: "StringExpression", value: 'orange' }, target: null },
+            afterTransform: "same"
+        },
+        {
+            then: 'it can parse a targeted `remove class` expression',
+            src: 'remove class "green" from another1',
+            afterParse: { type: "RemoveClassExpression", classList: { type: "StringExpression", value: 'green' }, target: { type: "IdentifierExpression", next: null, value: "another1" } },
+            afterTransform: "same"
+        },
+        {
             then: 'it can parse setting a variable to a string',
             src: 'set myColor to "blue"',
             afterParse: { type: "SetExpression", target: { type: "IdentifierExpression", next: null, value: "myColor" }, value: { type: "StringExpression", value: "blue" } },

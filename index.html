@@ -127,8 +127,13 @@
                 <td hs-indicate-set-color-style><strong>?</strong></td>
             </tr>
             <style type="text/css" media="screen">
-                [hs-indicate-add-class].green {
+                [hs-indicate-add-class].green,
+                [hs-indicate-remove-class].green {
                     color: green;
+                }
+
+                [hs-indicate-remove-class].red {
+                    color: red;
                 }
 
             </style>
@@ -138,6 +143,13 @@
                 <td><button _='on click add class "green" to next "[hs-indicate-add-class]"'>Click</button>
                 </td>
                 <td hs-indicate-add-class><strong>?</strong></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Remove a class</td>
+                <td><button _='on click remove class "red" from next "[hs-indicate-remove-class]"'>Click</button>
+                </td>
+                <td hs-indicate-remove-class class="red green"><strong>?</strong></td>
             </tr>
             <tr>
                 <td>6</td>

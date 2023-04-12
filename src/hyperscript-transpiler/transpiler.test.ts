@@ -56,6 +56,10 @@ given("a transpiler", () => {
         expect(program, "it references the given class").toMatch(/brown/)
         expect(program, "it mentions class").toMatch(/class/)
         expect(program, "it uses the given target").toMatch(/anotherTarget/)
+        program = t('remove class "red" from anotherTarget');
+        expect(program, "it references the given class").toMatch(/red/)
+        expect(program, "it mentions class").toMatch(/class/)
+        expect(program, "it uses the given target").toMatch(/anotherTarget/)
         program = t('next ".clazz"');
         expect(program, "it calls the runtime function").toMatch(/____.next\(/)
         expect(program, "it passes the selector").toMatch(/\.clazz/)

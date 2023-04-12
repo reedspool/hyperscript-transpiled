@@ -26,6 +26,7 @@ export const typesToTranspileFns:
     "CompoundExpression": ({ first, next }) => `${___(first)};${___(next)}`,
     "StyleAttrExpression": ({ attr, target }, { leftHand } = defaultOpts) => `${leftHand ? '' : '(last = '}${target ? ___(target) : 'target'}.style.${attr}${leftHand ? '' : ')'}`,
     "AddClassExpression": ({ classList, target }) => `(last = ${___(target)}.classList.add(${___(classList)}))`,
+    "RemoveClassExpression": ({ classList, target }) => `(last = ${___(target)}.classList.remove(${___(classList)}))`,
     "SetExpression": ({ target, value }) =>
         target.type == "IdentifierExpression"
             ? `${target.next ? '' : 'let '}${___(target)} = ${___(value)}`
