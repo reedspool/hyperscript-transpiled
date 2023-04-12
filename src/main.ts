@@ -32,9 +32,18 @@ window.exec = async (program: string, target?: Element) => {
 window.document.addEventListener('DOMContentLoaded', () => {
   const targets = document.querySelectorAll('[_]')
   Array.prototype.forEach.call(targets, (target) => {
-    const source = target.getAttribute('_');
-    const transpiled = window.transpile(source);
-    target.setAttribute('transpiled', transpiled)
-    window.exec(source, target)
+    let source, transpiled;
+    try {
+      source = target.getAttribute('_');
+      transpiled = window.transpile(source);
+      target.setAttribute('transpiled', transpiled)
+      window.exec(source, target)
+    } catch (error) {
+      console.error("Failed to attach hyperscript -- Details follow")
+      console.error("Source:", source)
+      console.error("Transpiled:", transpiled)
+      console.error("Target", target)
+      console.error("Error:", error)
+    }
   })
 })
